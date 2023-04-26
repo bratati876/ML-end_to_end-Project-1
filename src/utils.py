@@ -21,4 +21,35 @@ def save_object(file_path, obj):
         
     except Exception as e:
         raise CustomException(e, sys)
+    
+def evaluate_model( X_train, y_train, X_test, y_test, models):
+    # mae = mean_absolute_error(true, predicted)
+    # mse = mean_squared_error(true, predicted)
+    # rmse = np.sqrt(mean_squared_error(true, predicted))
+    # r2_square = r2_score(true, predicted)
+    # return mae, rmse, r2_square
+
+    try:
+        report = {}
+        for i in range(len(models)):
+            model = list(models.values())[i]
+
+            # Train_model
+            model.fit(X_train, y_train)
+            # Predict for training data
+            y_train_pred = model.predict(X_train)
+            # Predict for testing data
+            y_test_pred = model.predict(X_test)
+
+            train_model_score = r2_score(y_train, y_train_pred)
+            test_model_score = r2_score(y_test, y_test_pred)
+
+            report[list(models.keys())[i]] = test_model_score
+
+            return report
+
+        
+    except Exception as e:
+        raise CustomException(e, sys)
+        logging.info("Exception occured in the model evaluation code")
 
